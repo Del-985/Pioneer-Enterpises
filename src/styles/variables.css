@@ -1,0 +1,67 @@
+:root {
+  /* Brand Colors */
+  --color-primary: #1f4d3a;
+  --color-primary-dark: #17382b;
+  --color-primary-light: #2d6b52;
+
+  --color-accent: #c9a227;
+  --color-accent-light: #e0c45c;
+
+  --color-background: #f8f8f5;
+  --color-surface: #ffffff;
+
+  --color-text: #1b1b1b;
+  --color-text-light: #555555;
+
+  --color-border: #dddddd;
+
+  --color-success: #2f855a;
+  --color-warning: #d69e2e;
+  --color-danger: #c53030;
+
+  /* Layout */
+
+  --container-width: 1280px;
+
+  --header-height: 80px;
+
+  /* Typography */
+
+  --font-family:
+    "Inter",
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  --font-size-xs: .75rem;
+  --font-size-sm: .875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+  --font-size-3xl: 3rem;
+  --font-size-4xl: 4rem;
+
+  --line-height: 1.6;
+
+  /* Radius */
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  /* Shadows */
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+
+  --shadow-md: 0 6px 18px rgba(0,0,0,.12);
+
+  --shadow-lg: 0 12px 36px rgba(0,0,0,.18);
+
+  /* Animation */
+
+  --transition: .25s ease-in-out;
+}
