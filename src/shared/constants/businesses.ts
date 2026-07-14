@@ -3,6 +3,8 @@ import type {
   BusinessSlug
 } from "../types/business";
 
+import { ROUTES } from "./routes";
+
 export const businesses: BusinessDefinition[] = [
   {
     id: "pioneer-landscaping",
@@ -11,7 +13,7 @@ export const businesses: BusinessDefinition[] = [
     shortName: "Pioneer Landscaping",
     description:
       "Exterior cleaning, landscaping, property maintenance, and related services for residential and commercial customers.",
-    route: "/landscaping",
+    route: ROUTES.divisions.landscaping.root,
     status: "active",
     enabledModules: [
       "scheduling",
