@@ -13,7 +13,9 @@ export const ROUTES = {
       gallery: "/landscaping/gallery",
       quote: "/landscaping/quote",
       request: "/landscaping/request",
-      contact: "/landscaping/contact"
+      contact: "/landscaping/contact",
+      login: "/landscaping/login",
+      account: "/landscaping/account"
     },
 
     transport: {
