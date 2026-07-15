@@ -10,6 +10,7 @@ import "./styles/contacts.css";
 import "./styles/expenses.css";
 import "./styles/metrics.css";
 import "./styles/notifications.css";
+import "./styles/placeholders.css";
 
 const rootElement = document.getElementById("root");
 
