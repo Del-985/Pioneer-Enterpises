@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/global.css";
 import "./styles/admin.css";
+import "./styles/calendar.css";
 
 const rootElement = document.getElementById("root");
 
