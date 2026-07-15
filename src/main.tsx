@@ -7,6 +7,7 @@ import "./styles/home.css";
 import "./styles/admin.css";
 import "./styles/dashboard-customizer.css";
 import "./styles/dashboard-form-settings.css";
+import "./styles/weekly-snapshot.css";
 import "./styles/calendar.css";
 import "./styles/customers.css";
 import "./styles/contacts.css";
