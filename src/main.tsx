@@ -7,6 +7,7 @@ import "./styles/admin.css";
 import "./styles/calendar.css";
 import "./styles/customers.css";
 import "./styles/contacts.css";
+import "./styles/expenses.css";
 
 const rootElement = document.getElementById("root");
 
