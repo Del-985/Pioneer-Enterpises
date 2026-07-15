@@ -14,12 +14,27 @@ export type DashboardWidgetType =
 
 export type DashboardWidgetSize = "small" | "medium" | "large" | "tall";
 
+export type WeeklySnapshotSectionId =
+  | "jobs"
+  | "estimates"
+  | "revenue"
+  | "expenses"
+  | "customers"
+  | "notifications"
+  | "safety"
+  | "upcoming"
+  | "landscaping"
+  | "transport"
+  | "productions"
+  | "inventory";
+
 export interface DashboardWidgetSettings {
   title?: string;
   business: "all" | BusinessSlug;
   period: "today" | "week" | "month";
   limit: number;
   selectedFormIds?: string[];
+  selectedWeeklySectionIds?: WeeklySnapshotSectionId[];
 }
 
 export interface DashboardWidgetInstance {
