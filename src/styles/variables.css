@@ -1,32 +1,29 @@
 :root {
-  /* Brand Colors */
-  --color-primary: #1f4d3a;
-  --color-primary-dark: #17382b;
-  --color-primary-light: #2d6b52;
+  /* Warm Heritage brand palette */
+  --color-primary: #a6532d;
+  --color-primary-dark: #4a2f24;
+  --color-primary-light: #c96f43;
 
-  --color-accent: #c9a227;
-  --color-accent-light: #e0c45c;
+  --color-accent: #c89b3c;
+  --color-accent-light: #e3bd68;
 
-  --color-background: #f8f8f5;
-  --color-surface: #ffffff;
+  --color-background: #f6ebdd;
+  --color-surface: #fffaf3;
 
-  --color-text: #1b1b1b;
-  --color-text-light: #555555;
+  --color-text: #2d2926;
+  --color-text-light: #6f625a;
 
-  --color-border: #dddddd;
+  --color-border: #e7d3bc;
 
-  --color-success: #2f855a;
-  --color-warning: #d69e2e;
-  --color-danger: #c53030;
+  --color-success: #5f7a4a;
+  --color-warning: #c89b3c;
+  --color-danger: #a84c3d;
 
   /* Layout */
-
   --container-width: 1280px;
-
   --header-height: 80px;
 
   /* Typography */
-
   --font-family:
     "Inter",
     "Segoe UI",
@@ -34,6 +31,11 @@
     Helvetica,
     Arial,
     sans-serif;
+
+  --font-display:
+    Georgia,
+    "Times New Roman",
+    serif;
 
   --font-size-xs: .75rem;
   --font-size-sm: .875rem;
@@ -47,21 +49,16 @@
   --line-height: 1.6;
 
   /* Radius */
-
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 18px;
   --radius-xl: 24px;
 
   /* Shadows */
-
-  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
-
-  --shadow-md: 0 6px 18px rgba(0,0,0,.12);
-
-  --shadow-lg: 0 12px 36px rgba(0,0,0,.18);
+  --shadow-sm: 0 4px 14px rgba(74, 47, 36, .09);
+  --shadow-md: 0 10px 28px rgba(74, 47, 36, .14);
+  --shadow-lg: 0 18px 48px rgba(74, 47, 36, .2);
 
   /* Animation */
-
   --transition: .25s ease-in-out;
 }
