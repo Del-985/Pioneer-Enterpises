@@ -9,6 +9,7 @@ import "./styles/customers.css";
 import "./styles/contacts.css";
 import "./styles/expenses.css";
 import "./styles/metrics.css";
+import "./styles/notifications.css";
 
 const rootElement = document.getElementById("root");
 
