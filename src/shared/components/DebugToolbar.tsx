@@ -28,6 +28,7 @@ const sections: DebugSection[] = [
       { label: "Customers", path: "/admin/customers" },
       { label: "Contacts", path: "/admin/contacts" },
       { label: "Estimates", path: "/admin/estimates" },
+      { label: "Jobs", path: "/admin/jobs" },
       { label: "Expenses", path: "/admin/expenses" },
       { label: "Forms", path: "/admin/forms" },
       { label: "Documents", path: "/admin/documents" },
@@ -71,14 +72,11 @@ function DebugToolbar() {
           {sections.map((section) => (
             <section className="debug-toolbar__section" key={section.label}>
               <h2 className="debug-toolbar__heading">{section.label}</h2>
-
               <nav className="debug-toolbar__links">
                 {section.links.map((link) => (
                   <a
                     className={`debug-toolbar__link${
-                      currentPath === link.path
-                        ? " debug-toolbar__link--active"
-                        : ""
+                      currentPath === link.path ? " debug-toolbar__link--active" : ""
                     }`}
                     href={link.path}
                     key={link.path}
