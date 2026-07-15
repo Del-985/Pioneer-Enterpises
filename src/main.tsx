@@ -6,6 +6,7 @@ import "./styles/global.css";
 import "./styles/admin.css";
 import "./styles/calendar.css";
 import "./styles/customers.css";
+import "./styles/contacts.css";
 
 const rootElement = document.getElementById("root");
 
