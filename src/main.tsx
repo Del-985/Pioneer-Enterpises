@@ -5,6 +5,7 @@ import App from "./App";
 import "./styles/global.css";
 import "./styles/home.css";
 import "./styles/admin.css";
+import "./styles/dashboard-customizer.css";
 import "./styles/calendar.css";
 import "./styles/customers.css";
 import "./styles/contacts.css";
