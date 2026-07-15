@@ -11,6 +11,7 @@ import "./styles/expenses.css";
 import "./styles/metrics.css";
 import "./styles/notifications.css";
 import "./styles/placeholders.css";
+import "./styles/debug-toolbar.css";
 
 const rootElement = document.getElementById("root");
 
