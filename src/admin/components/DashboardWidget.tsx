@@ -38,10 +38,6 @@ interface DashboardWidgetProps {
 }
 
 function WidgetBody({ widget }: { widget: DashboardWidgetInstance }) {
-  const businessLabel = widget.settings.business === "all"
-    ? "All businesses"
-    : widget.settings.business;
-
   switch (widget.type) {
     case "today-snapshot":
       return (
