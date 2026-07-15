@@ -11,8 +11,10 @@ import "./styles/contacts.css";
 import "./styles/estimates.css";
 import "./styles/expenses.css";
 import "./styles/forms.css";
+import "./styles/history.css";
 import "./styles/metrics.css";
 import "./styles/notifications.css";
+import "./styles/settings.css";
 import "./styles/placeholders.css";
 import "./styles/debug-toolbar.css";
 
