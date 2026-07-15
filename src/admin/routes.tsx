@@ -6,6 +6,7 @@ import Contacts from "./pages/Contacts";
 import Customers from "./pages/Customers";
 import Estimates from "./pages/Estimates";
 import Expenses from "./pages/Expenses";
+import Forms from "./pages/Forms";
 import Metrics from "./pages/Metrics";
 import Notifications from "./pages/Notifications";
 import Overview from "./pages/Overview";
@@ -22,6 +23,7 @@ export const adminRoutes: RouteObject[] = [
       { path: "contacts", element: <Contacts /> },
       { path: "estimates", element: <Estimates /> },
       { path: "expenses", element: <Expenses /> },
+      { path: "forms", element: <Forms /> },
       { path: "metrics", element: <Metrics /> },
       { path: "notifications", element: <Notifications /> }
     ]
