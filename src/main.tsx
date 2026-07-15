@@ -8,6 +8,7 @@ import "./styles/admin.css";
 import "./styles/calendar.css";
 import "./styles/customers.css";
 import "./styles/contacts.css";
+import "./styles/estimates.css";
 import "./styles/expenses.css";
 import "./styles/metrics.css";
 import "./styles/notifications.css";
