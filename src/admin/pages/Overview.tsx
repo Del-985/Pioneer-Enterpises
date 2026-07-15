@@ -5,6 +5,7 @@ import DashboardWidget, {
 } from "../components/DashboardWidget";
 import DashboardWidgetSettings from "../components/DashboardWidgetSettings";
 import { defaultQuickFormIds } from "../../shared/constants/forms";
+import { defaultWeeklySnapshotSectionIds } from "../../shared/constants/weeklySnapshot";
 import type {
   DashboardWidgetInstance,
   DashboardWidgetSize,
@@ -16,7 +17,7 @@ const STORAGE_KEY = "pioneer-admin-dashboard-layout-v1";
 const defaultSettings = {
   business: "all" as const,
   period: "week" as const,
-  limit: 5
+  limit: 6
 };
 
 const defaultWidgets: DashboardWidgetInstance[] = [
@@ -24,13 +25,13 @@ const defaultWidgets: DashboardWidgetInstance[] = [
     instanceId: "today-snapshot",
     type: "today-snapshot",
     size: "tall",
-    settings: { ...defaultSettings, period: "today" }
+    settings: { ...defaultSettings, period: "today", limit: 5 }
   },
   {
     instanceId: "metrics",
     type: "metrics",
     size: "medium",
-    settings: { ...defaultSettings }
+    settings: { ...defaultSettings, limit: 4 }
   },
   {
     instanceId: "quick-forms",
@@ -39,6 +40,7 @@ const defaultWidgets: DashboardWidgetInstance[] = [
     settings: {
       ...defaultSettings,
       period: "today",
+      limit: 3,
       selectedFormIds: [...defaultQuickFormIds]
     }
   },
@@ -46,36 +48,66 @@ const defaultWidgets: DashboardWidgetInstance[] = [
     instanceId: "upcoming-jobs",
     type: "upcoming-jobs",
     size: "medium",
-    settings: { ...defaultSettings }
+    settings: { ...defaultSettings, limit: 5 }
   },
   {
     instanceId: "weekly-snapshot",
     type: "weekly-snapshot",
     size: "medium",
-    settings: { ...defaultSettings }
+    settings: {
+      ...defaultSettings,
+      selectedWeeklySectionIds: [...defaultWeeklySnapshotSectionIds]
+    }
   }
 ];
 
-function createInstance(
-  type: DashboardWidgetType
-): DashboardWidgetInstance {
-  const definition = dashboardWidgetCatalog.find(
-    (item) => item.type === type
-  )!;
+function settingsForType(type: DashboardWidgetType) {
+  if (type === "quick-forms") {
+    return { selectedFormIds: [...defaultQuickFormIds] };
+  }
+
+  if (type === "weekly-snapshot") {
+    return {
+      selectedWeeklySectionIds: [...defaultWeeklySnapshotSectionIds]
+    };
+  }
+
+  return {};
+}
+
+function createInstance(type: DashboardWidgetType): DashboardWidgetInstance {
+  const definition = dashboardWidgetCatalog.find((item) => item.type === type)!;
 
   return {
-    instanceId: `${type}-${Date.now()}-${Math.random()
-      .toString(36)
-      .slice(2, 7)}`,
+    instanceId: `${type}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     type,
     size: definition.defaultSize,
     settings: {
       ...defaultSettings,
-      ...(type === "quick-forms"
-        ? { selectedFormIds: [...defaultQuickFormIds] }
-        : {})
+      ...settingsForType(type)
     }
   };
+}
+
+function normalizeWidgets(widgets: DashboardWidgetInstance[]) {
+  return widgets.map((widget) => ({
+    ...widget,
+    settings: {
+      ...defaultSettings,
+      ...widget.settings,
+      ...(widget.type === "quick-forms" && !widget.settings.selectedFormIds
+        ? { selectedFormIds: [...defaultQuickFormIds] }
+        : {}),
+      ...(widget.type === "weekly-snapshot" &&
+      !widget.settings.selectedWeeklySectionIds
+        ? {
+            selectedWeeklySectionIds: [
+              ...defaultWeeklySnapshotSectionIds
+            ]
+          }
+        : {})
+    }
+  }));
 }
 
 function loadWidgets(): DashboardWidgetInstance[] {
@@ -85,7 +117,7 @@ function loadWidgets(): DashboardWidgetInstance[] {
 
     const parsed = JSON.parse(saved) as DashboardWidgetInstance[];
     return Array.isArray(parsed) && parsed.length > 0
-      ? parsed
+      ? normalizeWidgets(parsed)
       : defaultWidgets;
   } catch {
     return defaultWidgets;
@@ -93,14 +125,10 @@ function loadWidgets(): DashboardWidgetInstance[] {
 }
 
 function Overview() {
-  const [widgets, setWidgets] = useState<DashboardWidgetInstance[]>(
-    loadWidgets
-  );
+  const [widgets, setWidgets] = useState<DashboardWidgetInstance[]>(loadWidgets);
   const [editing, setEditing] = useState(false);
   const [draggedId, setDraggedId] = useState<string | null>(null);
-  const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(
-    null
-  );
+  const [selectedWidgetId, setSelectedWidgetId] = useState<string | null>(null);
   const [catalogOpen, setCatalogOpen] = useState(false);
 
   useEffect(() => {
@@ -146,7 +174,7 @@ function Overview() {
 
   const resetDashboard = () => {
     if (!window.confirm("Reset the dashboard to the default layout?")) return;
-    setWidgets(defaultWidgets);
+    setWidgets(normalizeWidgets(defaultWidgets));
     setSelectedWidgetId(null);
   };
 
@@ -155,9 +183,7 @@ function Overview() {
       <div className="custom-dashboard__heading">
         <div>
           <p className="admin-page-heading__eyebrow">Dashboard</p>
-          <h2 className="admin-page-heading__title">
-            Operations at a glance
-          </h2>
+          <h2 className="admin-page-heading__title">Operations at a glance</h2>
           <p className="admin-page-heading__description">
             Arrange, resize, replace, duplicate, and configure the widgets
             that matter most to you.
@@ -204,9 +230,7 @@ function Overview() {
               <p>Widget Library</p>
               <h3>Add another dashboard widget</h3>
             </div>
-            <button type="button" onClick={() => setCatalogOpen(false)}>
-              ×
-            </button>
+            <button type="button" onClick={() => setCatalogOpen(false)}>×</button>
           </div>
 
           <div className="dashboard-catalog__grid">
@@ -232,8 +256,8 @@ function Overview() {
 
       {editing ? (
         <div className="custom-dashboard__notice">
-          Drag widgets to reorder them. Use each widget's controls to
-          replace, resize, duplicate, remove, or configure it.
+          Drag widgets to reorder them. Use each widget's controls to replace,
+          resize, duplicate, remove, or configure it.
         </div>
       ) : null}
 
@@ -259,7 +283,7 @@ function Overview() {
                 const index = current.findIndex(
                   (item) => item.instanceId === widget.instanceId
                 );
-                const duplicate = {
+                const duplicate: DashboardWidgetInstance = {
                   ...widget,
                   instanceId: `${widget.type}-${Date.now()}-${Math.random()
                     .toString(36)
@@ -268,7 +292,11 @@ function Overview() {
                     ...widget.settings,
                     selectedFormIds: widget.settings.selectedFormIds
                       ? [...widget.settings.selectedFormIds]
-                      : undefined
+                      : undefined,
+                    selectedWeeklySectionIds:
+                      widget.settings.selectedWeeklySectionIds
+                        ? [...widget.settings.selectedWeeklySectionIds]
+                        : undefined
                   }
                 };
                 const next = [...current];
@@ -276,16 +304,13 @@ function Overview() {
                 return next;
               })
             }
-            onChangeType={(type: DashboardWidgetType) =>
+            onChangeType={(type) =>
               updateWidget(widget.instanceId, (current) => ({
                 ...current,
                 type,
                 settings: {
                   ...current.settings,
-                  ...(type === "quick-forms" &&
-                  !current.settings.selectedFormIds
-                    ? { selectedFormIds: [...defaultQuickFormIds] }
-                    : {})
+                  ...settingsForType(type)
                 }
               }))
             }
