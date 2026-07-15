@@ -43,6 +43,7 @@ export const ROUTES = {
     contacts: "/admin/contacts",
     estimates: "/admin/estimates",
     expenses: "/admin/expenses",
+    forms: "/admin/forms",
     documents: "/admin/documents",
     history: "/admin/history",
     metrics: "/admin/metrics",
