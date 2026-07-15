@@ -29,6 +29,7 @@ const sections: DebugSection[] = [
       { label: "Contacts", path: "/admin/contacts" },
       { label: "Estimates", path: "/admin/estimates" },
       { label: "Expenses", path: "/admin/expenses" },
+      { label: "Forms", path: "/admin/forms" },
       { label: "Documents", path: "/admin/documents" },
       { label: "History", path: "/admin/history" },
       { label: "Metrics", path: "/admin/metrics" },
