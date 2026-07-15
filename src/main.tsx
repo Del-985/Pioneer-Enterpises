@@ -8,6 +8,7 @@ import "./styles/calendar.css";
 import "./styles/customers.css";
 import "./styles/contacts.css";
 import "./styles/expenses.css";
+import "./styles/metrics.css";
 
 const rootElement = document.getElementById("root");
 
