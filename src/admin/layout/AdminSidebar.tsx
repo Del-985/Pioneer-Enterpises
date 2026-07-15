@@ -28,6 +28,10 @@ const navigationItems = [
     path: ROUTES.admin.expenses
   },
   {
+    label: "Forms",
+    path: ROUTES.admin.forms
+  },
+  {
     label: "Documents",
     path: ROUTES.admin.documents
   },
