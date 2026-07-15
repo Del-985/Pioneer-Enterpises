@@ -9,6 +9,7 @@ import "./styles/calendar.css";
 import "./styles/customers.css";
 import "./styles/contacts.css";
 import "./styles/estimates.css";
+import "./styles/jobs.css";
 import "./styles/expenses.css";
 import "./styles/forms.css";
 import "./styles/history.css";
