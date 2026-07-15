@@ -4,6 +4,7 @@ import AdminLayout from "./layout/AdminLayout";
 import Calendar from "./pages/Calendar";
 import Contacts from "./pages/Contacts";
 import Customers from "./pages/Customers";
+import Expenses from "./pages/Expenses";
 import Overview from "./pages/Overview";
 
 export const adminRoutes: RouteObject[] = [
@@ -15,7 +16,8 @@ export const adminRoutes: RouteObject[] = [
       { path: "overview", element: <Overview /> },
       { path: "calendar", element: <Calendar /> },
       { path: "customers", element: <Customers /> },
-      { path: "contacts", element: <Contacts /> }
+      { path: "contacts", element: <Contacts /> },
+      { path: "expenses", element: <Expenses /> }
     ]
   }
 ];
