@@ -42,6 +42,7 @@ export const ROUTES = {
     customers: "/admin/customers",
     contacts: "/admin/contacts",
     estimates: "/admin/estimates",
+    jobs: "/admin/jobs",
     expenses: "/admin/expenses",
     forms: "/admin/forms",
     documents: "/admin/documents",
