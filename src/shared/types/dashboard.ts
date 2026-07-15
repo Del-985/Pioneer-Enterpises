@@ -19,6 +19,7 @@ export interface DashboardWidgetSettings {
   business: "all" | BusinessSlug;
   period: "today" | "week" | "month";
   limit: number;
+  selectedFormIds?: string[];
 }
 
 export interface DashboardWidgetInstance {
