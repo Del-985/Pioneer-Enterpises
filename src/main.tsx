@@ -5,6 +5,7 @@ import App from "./App";
 import "./styles/global.css";
 import "./styles/admin.css";
 import "./styles/calendar.css";
+import "./styles/customers.css";
 
 const rootElement = document.getElementById("root");
 
