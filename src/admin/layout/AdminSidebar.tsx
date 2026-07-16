@@ -11,7 +11,6 @@ const navigationItems = [
   { label: "Jobs", path: ROUTES.admin.jobs },
   { label: "Expenses", path: ROUTES.admin.expenses },
   { label: "Forms", path: ROUTES.admin.forms },
-  { label: "Documents", path: ROUTES.admin.documents },
   { label: "History", path: ROUTES.admin.history },
   { label: "Metrics", path: ROUTES.admin.metrics },
   { label: "Notifications", path: ROUTES.admin.notifications },
