@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
-import { login } from "../../services/api/auth";
+import { login, logout } from "../../services/api/auth";
 import { getAccessToken } from "../../services/api/client";
 import { ROUTES } from "../../shared/constants/routes";
 
@@ -40,6 +40,7 @@ function AdminLogin() {
       const result = await login({ email, password });
 
       if (result.user.role !== "ADMIN" && result.user.role !== "EMPLOYEE") {
+        logout();
         setError("This account does not have administrative access.");
         return;
       }
