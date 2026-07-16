@@ -35,7 +35,7 @@ function Contact() {
             </div>
             <div>
               <span>Service Area</span>
-              <strong>Washington Parish and surrounding communities</strong>
+              <strong>Toledo, Monroe, Temperance, and surrounding areas</strong>
             </div>
             <div>
               <span>Business Hours</span>
