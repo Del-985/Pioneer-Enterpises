@@ -3,7 +3,7 @@
   right: 1rem;
   bottom: 1rem;
   z-index: 99999;
-  width: min(760px, calc(100vw - 2rem));
+  width: min(980px, calc(100vw - 2rem));
   color: #f8fafc;
   font-family: system-ui, sans-serif;
 }
@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  min-width: 120px;
+  min-width: 132px;
   min-height: 38px;
   padding: 0.55rem 0.8rem;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -24,17 +24,19 @@
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
+  cursor: pointer;
 }
 
 .debug-toolbar:not(.debug-toolbar--open) .debug-toolbar__toggle {
   border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
 .debug-toolbar__content {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1.1fr 1fr 1.35fr 1.8fr;
   gap: 1rem;
-  max-height: 46vh;
+  max-height: 52vh;
   padding: 1rem;
   overflow-y: auto;
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -48,9 +50,14 @@
   min-width: 0;
 }
 
+.debug-toolbar__section:first-child {
+  padding-right: 0.85rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .debug-toolbar__heading {
   margin: 0 0 0.55rem;
-  color: #93c5fd;
+  color: #f5c66b;
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -75,18 +82,29 @@
   font-size: 0.72rem;
   font-weight: 650;
   text-decoration: none;
+  transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
 }
 
 .debug-toolbar__link:hover {
-  border-color: rgba(147, 197, 253, 0.8);
-  background: rgba(147, 197, 253, 0.12);
+  border-color: rgba(245, 198, 107, 0.85);
+  background: rgba(245, 198, 107, 0.12);
   color: #ffffff;
 }
 
 .debug-toolbar__link--active {
-  border-color: #60a5fa;
-  background: #2563eb;
+  border-color: #c89b3c;
+  background: #a6532d;
   color: #ffffff;
+}
+
+@media (max-width: 980px) {
+  .debug-toolbar__content {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .debug-toolbar__section:first-child {
+    border-right: 0;
+  }
 }
 
 @media (max-width: 760px) {
@@ -98,6 +116,6 @@
 
   .debug-toolbar__content {
     grid-template-columns: 1fr;
-    max-height: 60vh;
+    max-height: 66vh;
   }
 }
