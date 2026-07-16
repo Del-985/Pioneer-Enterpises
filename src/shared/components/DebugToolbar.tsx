@@ -3,6 +3,7 @@ import { useState } from "react";
 interface DebugLink {
   label: string;
   path: string;
+  matchPrefix?: boolean;
 }
 
 interface DebugSection {
@@ -12,12 +13,35 @@ interface DebugSection {
 
 const sections: DebugSection[] = [
   {
+    label: "Apps",
+    links: [
+      { label: "Website", path: "/", matchPrefix: false },
+      { label: "Landscaping", path: "/landscaping", matchPrefix: true },
+      { label: "Transport", path: "/transport", matchPrefix: true },
+      { label: "Productions", path: "/productions", matchPrefix: true },
+      { label: "Admin", path: "/admin", matchPrefix: true }
+    ]
+  },
+  {
     label: "Website",
     links: [
       { label: "Home", path: "/" },
       { label: "Companies", path: "/companies" },
       { label: "About", path: "/about" },
       { label: "Contact", path: "/contact" }
+    ]
+  },
+  {
+    label: "Landscaping",
+    links: [
+      { label: "Home", path: "/landscaping" },
+      { label: "Services", path: "/landscaping/services" },
+      { label: "Gallery", path: "/landscaping/gallery" },
+      { label: "Quote", path: "/landscaping/quote" },
+      { label: "Request", path: "/landscaping/request" },
+      { label: "Contact", path: "/landscaping/contact" },
+      { label: "Login", path: "/landscaping/login" },
+      { label: "Account", path: "/landscaping/account" }
     ]
   },
   {
@@ -31,25 +55,24 @@ const sections: DebugSection[] = [
       { label: "Jobs", path: "/admin/jobs" },
       { label: "Expenses", path: "/admin/expenses" },
       { label: "Forms", path: "/admin/forms" },
-      { label: "Documents", path: "/admin/documents" },
       { label: "History", path: "/admin/history" },
       { label: "Metrics", path: "/admin/metrics" },
       { label: "Notifications", path: "/admin/notifications" },
       { label: "Settings", path: "/admin/settings" }
     ]
-  },
-  {
-    label: "Divisions",
-    links: [
-      { label: "Landscaping", path: "/landscaping" },
-      { label: "Transport", path: "/transport" },
-      { label: "Productions", path: "/productions" }
-    ]
   }
 ];
 
+function isLinkActive(link: DebugLink, currentPath: string) {
+  if (link.path === "/") return currentPath === "/";
+  if (link.matchPrefix) {
+    return currentPath === link.path || currentPath.startsWith(`${link.path}/`);
+  }
+  return currentPath === link.path;
+}
+
 function DebugToolbar() {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const currentPath = window.location.pathname;
 
   return (
@@ -63,7 +86,7 @@ function DebugToolbar() {
         onClick={() => setIsOpen((open) => !open)}
         aria-expanded={isOpen}
       >
-        <span>DEV NAV</span>
+        <span>DEBUG NAV</span>
         <span aria-hidden="true">{isOpen ? "×" : "↑"}</span>
       </button>
 
@@ -72,11 +95,13 @@ function DebugToolbar() {
           {sections.map((section) => (
             <section className="debug-toolbar__section" key={section.label}>
               <h2 className="debug-toolbar__heading">{section.label}</h2>
-              <nav className="debug-toolbar__links">
+              <nav className="debug-toolbar__links" aria-label={`${section.label} debug links`}>
                 {section.links.map((link) => (
                   <a
                     className={`debug-toolbar__link${
-                      currentPath === link.path ? " debug-toolbar__link--active" : ""
+                      isLinkActive(link, currentPath)
+                        ? " debug-toolbar__link--active"
+                        : ""
                     }`}
                     href={link.path}
                     key={link.path}
