@@ -41,7 +41,7 @@ const sections: DebugSection[] = [
       { label: "Request", path: "/landscaping/request" },
       { label: "Contact", path: "/landscaping/contact" },
       { label: "Login", path: "/landscaping/login" },
-      { label: "Account", path: "/landscaping/account" }
+      { label: "Customer Dashboard", path: "/landscaping/account" }
     ]
   },
   {
