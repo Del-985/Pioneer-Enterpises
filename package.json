@@ -8,6 +8,11 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "api:install": "npm --prefix server install",
+    "api:dev": "npm --prefix server run dev",
+    "api:build": "npm --prefix server run build",
+    "api:generate": "npm --prefix server run prisma:generate",
+    "api:migrate": "npm --prefix server run prisma:migrate",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
     "tauri:build": "tauri build"
