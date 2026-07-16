@@ -6,6 +6,7 @@ import "./styles/global.css";
 import "./styles/home.css";
 import "./styles/landscaping.css";
 import "./styles/landscaping-pages.css";
+import "./styles/landscaping-customer-pages.css";
 import "./styles/admin.css";
 import "./styles/dashboard-customizer.css";
 import "./styles/dashboard-form-settings.css";
