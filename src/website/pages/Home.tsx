@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import pioneerEnterprisesLogo from "../assets/pioneer-enterprises-logo.svg";
+
 const companies = [
   {
     name: "Pioneer Pressure Washing & Landscaping",
@@ -38,7 +40,7 @@ const values = [
   {
     title: "Built for Growth",
     description:
-      "Pioneer Management Group creates a shared foundation that allows every company to grow without losing its identity."
+      "Pioneer Enterprises creates a shared foundation that allows every company to grow without losing its identity."
   }
 ];
 
@@ -48,16 +50,22 @@ function Home() {
       <section className="home-hero">
         <div className="container home-hero__content">
           <div className="home-hero__copy">
-            <p className="home-hero__eyebrow">Pioneer Management Group</p>
+            <div className="home-hero__brand">
+              <img
+                className="home-hero__logo"
+                src={pioneerEnterprisesLogo}
+                alt="Pioneer Enterprises"
+              />
+            </div>
 
             <h1 className="home-hero__title">
               Building businesses that solve real problems.
             </h1>
 
             <p className="home-hero__description">
-              Pioneer Management Group supports a growing family of service
-              companies across property care, transportation, logistics, and
-              media production.
+              Pioneer Enterprises supports a growing family of service companies
+              across property care, transportation, logistics, and media
+              production.
             </p>
 
             <div className="home-hero__actions">
@@ -159,8 +167,8 @@ function Home() {
             </h2>
 
             <p className="home-section__description">
-              Pioneer Management Group provides the shared structure behind
-              each company, including technology, administration, operations,
+              Pioneer Enterprises provides the shared structure behind each
+              company, including technology, administration, operations,
               branding, and long-term planning.
             </p>
           </div>
