@@ -1,6 +1,8 @@
 import type { RouteObject } from "react-router-dom";
 
+import RequireAdmin from "./auth/RequireAdmin";
 import AdminLayout from "./layout/AdminLayout";
+import AdminLogin from "./pages/AdminLogin";
 import Calendar from "./pages/Calendar";
 import Contacts from "./pages/Contacts";
 import Customers from "./pages/Customers";
@@ -16,8 +18,16 @@ import Settings from "./pages/Settings";
 
 export const adminRoutes: RouteObject[] = [
   {
+    path: "/admin/login",
+    element: <AdminLogin />
+  },
+  {
     path: "/admin",
-    element: <AdminLayout />,
+    element: (
+      <RequireAdmin>
+        <AdminLayout />
+      </RequireAdmin>
+    ),
     children: [
       { index: true, element: <Overview /> },
       { path: "overview", element: <Overview /> },
