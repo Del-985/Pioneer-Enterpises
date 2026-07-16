@@ -4,6 +4,8 @@ import Landscaping from "./Landscaping";
 import LandscapingLogin from "./LandscapingLogin";
 import LandscapingModulePage from "./LandscapingModulePage";
 import LandscapingLayout from "./layout/LandscapingLayout";
+import QuoteRequest from "./pages/QuoteRequest";
+import Services from "./pages/Services";
 import { ROUTES } from "../../shared/constants/routes";
 
 export const landscapingRoutes: RouteObject[] = [
@@ -12,18 +14,7 @@ export const landscapingRoutes: RouteObject[] = [
     element: <LandscapingLayout />,
     children: [
       { index: true, element: <Landscaping /> },
-      {
-        path: "services",
-        element: (
-          <LandscapingModulePage
-            eyebrow="Services"
-            title="Landscaping and property services"
-            description="Detailed service packages, recurring maintenance options, and specialty work will live here."
-            primaryLabel="Request Service"
-            primaryPath={ROUTES.divisions.landscaping.request}
-          />
-        )
-      },
+      { path: "services", element: <Services /> },
       {
         path: "gallery",
         element: (
@@ -34,16 +25,7 @@ export const landscapingRoutes: RouteObject[] = [
           />
         )
       },
-      {
-        path: "quote",
-        element: (
-          <LandscapingModulePage
-            eyebrow="Estimates"
-            title="Request an estimate"
-            description="The customer estimate-request workflow will be built into this module."
-          />
-        )
-      },
+      { path: "quote", element: <QuoteRequest /> },
       {
         path: "request",
         element: (
