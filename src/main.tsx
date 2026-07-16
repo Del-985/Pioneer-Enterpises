@@ -10,6 +10,7 @@ import "./styles/landscaping-customer-pages.css";
 import "./styles/landscaping-account.css";
 import "./styles/landscaping-auth.css";
 import "./styles/admin.css";
+import "./styles/admin-auth.css";
 import "./styles/dashboard-customizer.css";
 import "./styles/dashboard-form-settings.css";
 import "./styles/weekly-snapshot.css";
