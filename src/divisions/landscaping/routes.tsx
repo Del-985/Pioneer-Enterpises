@@ -1,7 +1,11 @@
 import type { RouteObject } from "react-router-dom";
 
 import Landscaping from "./Landscaping";
-import LandscapingLogin from "./LandscapingLogin";
+import ForgotPassword from "./auth/ForgotPassword";
+import Login from "./auth/Login";
+import Register from "./auth/Register";
+import ResetPassword from "./auth/ResetPassword";
+import VerifyEmail from "./auth/VerifyEmail";
 import LandscapingLayout from "./layout/LandscapingLayout";
 import Contact from "./pages/Contact";
 import CustomerAccount from "./pages/CustomerAccount";
@@ -22,7 +26,11 @@ export const landscapingRoutes: RouteObject[] = [
       { path: "quote", element: <QuoteRequest /> },
       { path: "request", element: <ServiceRequest /> },
       { path: "contact", element: <Contact /> },
-      { path: "login", element: <LandscapingLogin /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+      { path: "reset-password", element: <ResetPassword /> },
+      { path: "verify-email", element: <VerifyEmail /> },
       { path: "account", element: <CustomerAccount /> }
     ]
   }
