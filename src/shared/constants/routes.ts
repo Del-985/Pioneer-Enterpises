@@ -15,6 +15,10 @@ export const ROUTES = {
       request: "/landscaping/request",
       contact: "/landscaping/contact",
       login: "/landscaping/login",
+      register: "/landscaping/register",
+      forgotPassword: "/landscaping/forgot-password",
+      resetPassword: "/landscaping/reset-password",
+      verifyEmail: "/landscaping/verify-email",
       account: "/landscaping/account"
     },
 
