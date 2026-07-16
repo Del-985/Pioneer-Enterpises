@@ -1,10 +1,14 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
+import { logout } from "../../services/api/auth";
 import { availableBusinesses } from "../../shared/constants/businesses";
+import { ROUTES } from "../../shared/constants/routes";
 import type { BusinessSlug } from "../../shared/types/business";
 
 function AdminHeader() {
+  const navigate = useNavigate();
   const [selectedBusiness, setSelectedBusiness] = useState<
     BusinessSlug | "all"
   >("all");
@@ -15,6 +19,11 @@ function AdminHeader() {
     setSelectedBusiness(
       event.target.value as BusinessSlug | "all"
     );
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate(ROUTES.admin.login, { replace: true });
   };
 
   return (
@@ -61,7 +70,8 @@ function AdminHeader() {
         <button
           className="admin-header__profile-button"
           type="button"
-          aria-label="Open administrator profile menu"
+          aria-label="Sign out of the administrator account"
+          onClick={handleLogout}
         >
           <span
             className="admin-header__profile-avatar"
@@ -72,7 +82,7 @@ function AdminHeader() {
 
           <span className="admin-header__profile-text">
             <strong>Administrator</strong>
-            <small>System access</small>
+            <small>Sign out</small>
           </span>
         </button>
       </div>
