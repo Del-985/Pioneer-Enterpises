@@ -25,6 +25,8 @@ jobs:
     name: Build Windows desktop app
     runs-on: windows-latest
     timeout-minutes: 45
+    env:
+      VITE_DEBUG_NAV: "true"
 
     steps:
       - name: Checkout repository
