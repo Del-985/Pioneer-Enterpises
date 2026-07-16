@@ -2,9 +2,9 @@ import type { RouteObject } from "react-router-dom";
 
 import Landscaping from "./Landscaping";
 import LandscapingLogin from "./LandscapingLogin";
-import LandscapingModulePage from "./LandscapingModulePage";
 import LandscapingLayout from "./layout/LandscapingLayout";
 import Contact from "./pages/Contact";
+import CustomerAccount from "./pages/CustomerAccount";
 import Gallery from "./pages/Gallery";
 import QuoteRequest from "./pages/QuoteRequest";
 import ServiceRequest from "./pages/ServiceRequest";
@@ -23,16 +23,7 @@ export const landscapingRoutes: RouteObject[] = [
       { path: "request", element: <ServiceRequest /> },
       { path: "contact", element: <Contact /> },
       { path: "login", element: <LandscapingLogin /> },
-      {
-        path: "account",
-        element: (
-          <LandscapingModulePage
-            eyebrow="Customer Account"
-            title="Your landscaping account"
-            description="Requests, estimates, appointments, payments, and service history will be available here after authentication is connected."
-          />
-        )
-      }
+      { path: "account", element: <CustomerAccount /> }
     ]
   }
 ];
