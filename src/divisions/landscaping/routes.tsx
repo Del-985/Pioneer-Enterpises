@@ -4,7 +4,10 @@ import Landscaping from "./Landscaping";
 import LandscapingLogin from "./LandscapingLogin";
 import LandscapingModulePage from "./LandscapingModulePage";
 import LandscapingLayout from "./layout/LandscapingLayout";
+import Contact from "./pages/Contact";
+import Gallery from "./pages/Gallery";
 import QuoteRequest from "./pages/QuoteRequest";
+import ServiceRequest from "./pages/ServiceRequest";
 import Services from "./pages/Services";
 import { ROUTES } from "../../shared/constants/routes";
 
@@ -15,37 +18,10 @@ export const landscapingRoutes: RouteObject[] = [
     children: [
       { index: true, element: <Landscaping /> },
       { path: "services", element: <Services /> },
-      {
-        path: "gallery",
-        element: (
-          <LandscapingModulePage
-            eyebrow="Gallery"
-            title="Completed property work"
-            description="Project photos and before-and-after results will be added here."
-          />
-        )
-      },
+      { path: "gallery", element: <Gallery /> },
       { path: "quote", element: <QuoteRequest /> },
-      {
-        path: "request",
-        element: (
-          <LandscapingModulePage
-            eyebrow="Service Requests"
-            title="Request landscaping service"
-            description="The customer-facing service request workflow will be built into this module."
-          />
-        )
-      },
-      {
-        path: "contact",
-        element: (
-          <LandscapingModulePage
-            eyebrow="Contact"
-            title="Contact Pioneer Landscaping Services"
-            description="Direct contact details and the landscaping contact form will live here."
-          />
-        )
-      },
+      { path: "request", element: <ServiceRequest /> },
+      { path: "contact", element: <Contact /> },
       { path: "login", element: <LandscapingLogin /> },
       {
         path: "account",
