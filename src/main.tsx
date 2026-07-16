@@ -4,6 +4,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/global.css";
 import "./styles/home.css";
+import "./styles/home-logo.css";
 import "./styles/landscaping.css";
 import "./styles/landscaping-pages.css";
 import "./styles/landscaping-customer-pages.css";
