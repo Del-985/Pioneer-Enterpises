@@ -156,6 +156,7 @@ The API runs on `http://localhost:4000` by default.
 | `npm run api:install` | Install backend dependencies |
 | `npm run api:dev` | Start the backend development server |
 | `npm run api:build` | Build the backend |
+| `npm run api:test` | Run backend integration tests |
 | `npm run api:generate` | Generate the Prisma client |
 | `npm run api:migrate` | Run local Prisma migrations |
 | `npm run tauri:dev` | Run the Tauri desktop application in development |
@@ -186,6 +187,8 @@ The project follows several core principles:
 - A backend designed to grow into a complete ERP platform
 
 ## Roadmap
+
+See [ROADMAP.md](ROADMAP.md) for the ordered delivery plan, milestone acceptance criteria, and immediate execution sequence.
 
 ### Foundation
 

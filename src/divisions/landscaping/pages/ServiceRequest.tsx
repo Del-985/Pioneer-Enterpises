@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 
 import { ROUTES } from "../../../shared/constants/routes";
+import { submitServiceRequest } from "../../../services/api/landscaping";
 
 const serviceOptions = [
   "Lawn Maintenance",
@@ -51,6 +52,8 @@ function ServiceRequest() {
   const [data, setData] = useState(initialData);
   const [reviewing, setReviewing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const location = useMemo(
     () => [data.address, data.city, data.state, data.zip].filter(Boolean).join(", "),
@@ -67,6 +70,47 @@ function ServiceRequest() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleSubmit = async () => {
+    const nameParts = data.name.trim().split(/\s+/);
+    if (nameParts.length < 2) {
+      setSubmitError("Please enter both a first and last name.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      await submitServiceRequest({
+        customer: {
+          firstName: nameParts[0],
+          lastName: nameParts.slice(1).join(" "),
+          companyName: data.company || undefined,
+          email: data.email,
+          phone: data.phone
+        },
+        property: {
+          streetAddress: data.address,
+          city: data.city,
+          state: data.state,
+          postalCode: data.zip,
+          accessNotes: data.accessNotes || undefined
+        },
+        serviceType: data.service,
+        description: data.details,
+        preferredDate: data.preferredDate || undefined,
+        preferredWindow: data.preferredTime || undefined
+      });
+      setSubmitted(true);
+      setReviewing(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Unable to submit the service request.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (submitted) {
     return (
       <section className="landscaping-form-page">
@@ -74,8 +118,8 @@ function ServiceRequest() {
           <p className="landscaping-eyebrow">Request Received</p>
           <h1>We have your service request.</h1>
           <p>
-            This frontend confirmation will connect to the Pioneer backend later.
-            For now, no request has been transmitted or stored.
+            Your request has been transmitted and saved. The landscaping team can
+            now review it and contact you about scheduling.
           </p>
           <div className="landscaping-form-success__actions">
             <button
@@ -85,6 +129,7 @@ function ServiceRequest() {
                 setData(initialData);
                 setReviewing(false);
                 setSubmitted(false);
+                setSubmitError("");
               }}
             >
               Start Another Request
@@ -117,10 +162,11 @@ function ServiceRequest() {
             <button className="landscaping-button landscaping-button--secondary" type="button" onClick={() => setReviewing(false)}>
               Back to Edit
             </button>
-            <button className="landscaping-button landscaping-button--primary" type="button" onClick={() => setSubmitted(true)}>
-              Submit Request
+            <button className="landscaping-button landscaping-button--primary" type="button" onClick={handleSubmit} disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit Request"}
             </button>
           </div>
+          {submitError ? <p role="alert">{submitError}</p> : null}
         </div>
       </section>
     );

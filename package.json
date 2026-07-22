@@ -11,6 +11,7 @@
     "api:install": "npm --prefix server install",
     "api:dev": "npm --prefix server run dev",
     "api:build": "npm --prefix server run build",
+    "api:test": "npm --prefix server test",
     "api:generate": "npm --prefix server run prisma:generate",
     "api:migrate": "npm --prefix server run prisma:migrate",
     "tauri": "tauri",

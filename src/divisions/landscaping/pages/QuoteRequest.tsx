@@ -2,6 +2,7 @@ import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
 import { ROUTES } from "../../../shared/constants/routes";
+import { submitQuoteRequest } from "../../../services/api/landscaping";
 
 const serviceOptions = [
   "Lawn Maintenance",
@@ -57,6 +58,9 @@ function QuoteRequest() {
   const [attachmentNames, setAttachmentNames] = useState<string[]>([]);
   const [isReviewing, setIsReviewing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [quoteNumber, setQuoteNumber] = useState("");
 
   const updateField = <K extends keyof QuoteRequestData>(
     key: K,
@@ -76,10 +80,44 @@ function QuoteRequest() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
-    setIsReviewing(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleSubmit = async () => {
+    const nameParts = formData.name.trim().split(/\s+/);
+    if (nameParts.length < 2) {
+      setSubmitError("Please enter both a first and last name.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const result = await submitQuoteRequest({
+        customer: {
+          firstName: nameParts[0],
+          lastName: nameParts.slice(1).join(" "),
+          companyName: formData.company || undefined,
+          email: formData.email,
+          phone: formData.phone
+        },
+        property: {
+          streetAddress: formData.street,
+          city: formData.city,
+          state: formData.state,
+          postalCode: formData.zip
+        },
+        serviceType: formData.service,
+        description: formData.description,
+        preferredTiming: formData.preferredTiming || undefined
+      });
+      setQuoteNumber(result.quote.number);
+      setSubmitted(true);
+      setIsReviewing(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Unable to submit the quote request.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const clearForm = () => {
@@ -87,6 +125,8 @@ function QuoteRequest() {
     setAttachmentNames([]);
     setIsReviewing(false);
     setSubmitted(false);
+    setSubmitError("");
+    setQuoteNumber("");
   };
 
   if (submitted) {
@@ -96,9 +136,8 @@ function QuoteRequest() {
           <p className="landscaping-eyebrow">Quote Request Received</p>
           <h1>Thank you, {formData.name}.</h1>
           <p>
-            Your request has been prepared in the frontend. Once the backend is
-            connected, this step will create a customer record and notify the
-            landscaping team automatically.
+            Your request has been saved. Your reference number is <strong>{quoteNumber}</strong>.
+            The landscaping team can now review it and follow up with you.
           </p>
           <div className="landscaping-quote-confirmation__actions">
             <button
@@ -175,10 +214,12 @@ function QuoteRequest() {
               className="landscaping-button landscaping-button--primary"
               type="button"
               onClick={handleSubmit}
+              disabled={isSubmitting}
             >
-              Submit Quote Request
+              {isSubmitting ? "Submitting..." : "Submit Quote Request"}
             </button>
           </div>
+          {submitError ? <p role="alert">{submitError}</p> : null}
         </div>
       </section>
     );

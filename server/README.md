@@ -17,6 +17,23 @@ npm run api:dev
 
 The API defaults to `http://localhost:4000`.
 
+## Database migrations and tests
+
+Apply the checked-in migrations before starting the API:
+
+```bash
+npm run prisma:deploy
+```
+
+The integration suite requires a disposable PostgreSQL database. Set
+`DATABASE_URL` to that database, apply the migrations, and run:
+
+```bash
+npm test
+```
+
+The backend CI workflow provisions PostgreSQL and performs these steps automatically.
+
 ## Current endpoints
 
 - `GET /health`
