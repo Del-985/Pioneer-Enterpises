@@ -39,6 +39,27 @@ afterAll(async () => {
 });
 
 describe("public submissions", () => {
+  it("returns security headers and a request identifier", async () => {
+    const response = await request(app).get("/health");
+
+    expect(response.status).toBe(200);
+    expect(response.headers["x-request-id"]).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+    );
+    expect(response.headers["x-content-type-options"]).toBe("nosniff");
+    expect(response.headers["content-security-policy"]).toBeDefined();
+  });
+
+  it("reports database readiness", async () => {
+    const response = await request(app).get("/ready");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      status: "ready",
+      service: "pioneer-enterprises-api"
+    });
+  });
+
   it("creates a quote with its customer and property", async () => {
     const response = await request(app)
       .post("/api/public/quotes")
@@ -110,5 +131,22 @@ describe("public submissions", () => {
     expect(response.body.message).toBe("Validation failed.");
     await expect(prisma.customer.count()).resolves.toBe(0);
     await expect(prisma.serviceRequest.count()).resolves.toBe(0);
+  });
+
+  it("rate limits repeated public submissions", async () => {
+    let response;
+
+    for (let attempt = 0; attempt < 31; attempt += 1) {
+      response = await request(app)
+        .post("/api/public/service-requests")
+        .set("X-Forwarded-For", "198.51.100.42")
+        .send({});
+    }
+
+    expect(response?.status).toBe(429);
+    expect(response?.body).toMatchObject({
+      message: "Too many requests. Please try again later."
+    });
+    expect(response?.body.requestId).toBeDefined();
   });
 });

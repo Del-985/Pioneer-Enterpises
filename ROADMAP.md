@@ -38,12 +38,12 @@ The public intake path is close to its first deployable state. Most administrati
 - [x] Create the initial versioned database migration
 - [x] Add PostgreSQL-backed integration tests
 - [x] Add backend CI with migration, build, and test stages
-- [ ] Run the integration suite successfully in GitHub Actions
+- [x] Run the integration suite successfully in GitHub Actions
 - [ ] Provision development and production PostgreSQL databases
 - [ ] Deploy the API and verify `/health` in production
 - [ ] Configure the production frontend API URL and allowed origin
-- [ ] Add structured request logging and request IDs
-- [ ] Add rate limiting and baseline HTTP security headers
+- [x] Add structured request logging and request IDs
+- [x] Add rate limiting and baseline HTTP security headers
 
 ### Exit criteria
 

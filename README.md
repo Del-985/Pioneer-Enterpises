@@ -166,6 +166,7 @@ The API runs on `http://localhost:4000` by default.
 
 ```text
 GET  /health
+GET  /ready
 POST /api/auth/register
 POST /api/auth/login
 GET  /api/auth/me

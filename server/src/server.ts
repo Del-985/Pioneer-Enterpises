@@ -1,13 +1,14 @@
 import { app } from "./app.js";
 import { env } from "./config/env.js";
 import { prisma } from "./lib/prisma.js";
+import { logEvent } from "./lib/logger.js";
 
 const server = app.listen(env.PORT, () => {
-  console.log(`Pioneer API listening on port ${env.PORT}`);
+  logEvent("info", "server_started", { port: env.PORT, environment: env.NODE_ENV });
 });
 
 async function shutdown(signal: string) {
-  console.log(`${signal} received. Shutting down.`);
+  logEvent("info", "server_shutdown_started", { signal });
   server.close(async () => {
     await prisma.$disconnect();
     process.exit(0);

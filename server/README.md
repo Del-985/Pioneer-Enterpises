@@ -37,6 +37,7 @@ The backend CI workflow provisions PostgreSQL and performs these steps automatic
 ## Current endpoints
 
 - `GET /health`
+- `GET /ready` (includes database connectivity)
 - `POST /api/auth/register`
 - `POST /api/auth/login`
 - `GET /api/auth/me`
@@ -64,3 +65,8 @@ The backend is isolated under `server/`, so it can be deployed independently fro
 - replace the local frontend API URL with the deployed backend URL;
 - restrict `CLIENT_ORIGIN` to the production website origin;
 - use a long randomly generated `JWT_SECRET`.
+
+The API emits JSON request logs with an `X-Request-Id` correlation value. Baseline
+security headers and separate API, authentication, and public-submission rate
+limits are enabled by default. Render uses `/ready` so a deployment is considered
+healthy only when PostgreSQL is reachable.
