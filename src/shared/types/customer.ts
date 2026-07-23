@@ -1,6 +1,6 @@
 import type { BusinessSlug } from "./business";
 
-export type CustomerStatus = "lead" | "active" | "inactive";
+export type CustomerStatus = "lead" | "active" | "inactive" | "archived";
 
 export interface CustomerAddress {
   street: string;
@@ -27,6 +27,7 @@ export interface Customer {
   notes?: string;
   jobCount: number;
   estimateCount: number;
+  serviceRequestCount?: number;
   lastActivityAt?: string;
   activity: CustomerActivity[];
 }

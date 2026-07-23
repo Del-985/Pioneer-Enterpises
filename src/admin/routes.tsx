@@ -15,6 +15,7 @@ import Metrics from "./pages/Metrics";
 import Notifications from "./pages/Notifications";
 import Overview from "./pages/Overview";
 import Settings from "./pages/Settings";
+import ServiceRequests from "./pages/ServiceRequests";
 
 export const adminRoutes: RouteObject[] = [
   {
@@ -35,6 +36,7 @@ export const adminRoutes: RouteObject[] = [
       { path: "customers", element: <Customers /> },
       { path: "contacts", element: <Contacts /> },
       { path: "estimates", element: <Estimates /> },
+      { path: "service-requests", element: <ServiceRequests /> },
       { path: "jobs", element: <Jobs /> },
       { path: "expenses", element: <Expenses /> },
       { path: "forms", element: <Forms /> },

@@ -61,6 +61,8 @@ model User {
   status             RecordStatus        @default(ACTIVE)
   customer            Customer?
   notifications      Notification[]
+  assignedQuotes     Quote[]             @relation("QuoteAssignee")
+  assignedRequests   ServiceRequest[]    @relation("ServiceRequestAssignee")
   createdAuditEvents AuditEvent[]         @relation("AuditActor")
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
@@ -112,6 +114,8 @@ model Quote {
   customer    Customer     @relation(fields: [customerId], references: [id], onDelete: Restrict)
   propertyId  String?
   property    Property?    @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  assignedToId String?
+  assignedTo   User?        @relation("QuoteAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   status      QuoteStatus  @default(DRAFT)
   title       String
   description String?
@@ -121,10 +125,14 @@ model Quote {
   total       Decimal      @default(0) @db.Decimal(12, 2)
   expiresAt   DateTime?
   approvedAt  DateTime?
+  internalNotes String?
   items       QuoteItem[]
   jobs        Job[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  @@index([status, createdAt])
+  @@index([assignedToId])
 }
 
 model QuoteItem {
@@ -146,15 +154,21 @@ model ServiceRequest {
   customer         Customer      @relation(fields: [customerId], references: [id], onDelete: Restrict)
   propertyId       String?
   property         Property?     @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+  assignedToId     String?
+  assignedTo       User?          @relation("ServiceRequestAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   serviceType      String
   description      String
   preferredDate    DateTime?
   preferredWindow  String?
   status           RequestStatus @default(NEW)
   source            String        @default("website")
+  internalNotes     String?
   jobs              Job[]
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
+
+  @@index([status, createdAt])
+  @@index([assignedToId])
 }
 
 model Job {

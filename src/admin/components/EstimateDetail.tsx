@@ -7,7 +7,7 @@ import {
 interface EstimateDetailProps {
   estimate?: Estimate;
   onStatusChange: (status: EstimateStatus) => void;
-  onEdit: () => void;
+  onEdit?: () => void;
 }
 
 function formatCurrency(value: number) {
@@ -103,9 +103,7 @@ function EstimateDetail({
       ) : null}
 
       <div className="estimate-detail__actions">
-        <button type="button" onClick={onEdit}>
-          Edit
-        </button>
+        {onEdit ? <button type="button" onClick={onEdit}>Edit</button> : null}
         <button type="button" onClick={() => onStatusChange("sent")}>
           Mark Sent
         </button>

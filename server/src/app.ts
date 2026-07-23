@@ -13,6 +13,7 @@ import {
 } from "./middleware/rateLimiters.js";
 import { requestContext } from "./middleware/requestContext.js";
 import authRoutes from "./routes/auth.js";
+import adminRoutes from "./routes/admin.js";
 import publicRoutes from "./routes/public.js";
 
 export const app = express();
@@ -47,6 +48,7 @@ app.get("/ready", async (_request, response) => {
 });
 
 app.use("/api/auth", authRateLimiter, authRoutes);
+app.use("/api/admin", adminRoutes);
 app.use("/api/public", publicSubmissionRateLimiter, publicRoutes);
 
 app.use(notFound);

@@ -56,35 +56,35 @@ The public intake path is close to its first deployable state. Most administrati
 
 ## Milestone 1 — Admin intake operations
 
-**Status: Next**
+**Status: Complete**
 
 This milestone makes submitted leads usable by the landscaping team.
 
 ### API scope
 
-- [ ] Add authenticated, role-protected admin routing
-- [ ] List and view customers with search, filtering, and pagination
-- [ ] List and view quote requests
-- [ ] List and view service requests
-- [ ] Update quote and service-request statuses
-- [ ] Add internal notes and assignment fields
-- [ ] Record all administrative changes in `AuditEvent`
-- [ ] Add consistent pagination, sorting, error, and response formats
+- [x] Add authenticated, role-protected admin routing
+- [x] List and view customers with search, filtering, and pagination
+- [x] List and view quote requests
+- [x] List and view service requests
+- [x] Update quote and service-request statuses
+- [x] Add internal notes and assignment fields
+- [x] Record all administrative changes in `AuditEvent`
+- [x] Add consistent pagination, sorting, error, and response formats
 
 ### Frontend scope
 
-- [ ] Replace mock customer data with API data
-- [ ] Replace mock estimate/quote data with API data
-- [ ] Add a service-request inbox to the admin interface
-- [ ] Add loading, empty, failure, and retry states
-- [ ] Make filters and detail panels URL-addressable
+- [x] Replace mock customer data with API data
+- [x] Replace mock estimate/quote data with API data
+- [x] Add a service-request inbox to the admin interface
+- [x] Add loading, empty, failure, and retry states
+- [x] Make filters and detail panels URL-addressable
 
 ### Test scope
 
-- [ ] Authorization tests for admin, employee, customer, and anonymous users
-- [ ] CRUD and status-transition integration tests
-- [ ] Pagination and filtering tests
-- [ ] Audit-event tests
+- [x] Authorization tests for admin, employee, customer, and anonymous users
+- [x] CRUD and status-transition integration tests
+- [x] Pagination and filtering tests
+- [x] Audit-event tests
 
 ### Exit criteria
 
@@ -96,7 +96,7 @@ This milestone makes submitted leads usable by the landscaping team.
 
 ## Milestone 2 — Quotes, estimates, and job conversion
 
-**Status: Later**
+**Status: Next**
 
 ### Scope
 
@@ -240,10 +240,10 @@ Every milestone should include:
 
 1. Push the migration and integration-test foundation and confirm Backend CI passes.
 2. Provision PostgreSQL and deploy the API to Render.
-3. Add authenticated admin list/detail endpoints for service requests and quotes.
-4. Connect the admin intake screens to those endpoints.
-5. Add status transitions, notes, assignments, and audit events.
-6. Begin quote line items and job conversion only after intake operations are stable.
+3. Provision PostgreSQL and deploy the API when the Render workspace is restored.
+4. Configure the production frontend API URL and allowed origin.
+5. Begin quote line items, server-side totals, and job conversion.
+6. Add customer-facing quote approval after the quote workflow is stable.
 
 ## Deliberately deferred decisions
 

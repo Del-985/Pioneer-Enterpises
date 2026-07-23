@@ -28,6 +28,7 @@ export interface Estimate {
   discount: number;
   taxRate: number;
   notes?: string;
+  assignedTo?: string;
 }
 
 export interface EstimateTotals {

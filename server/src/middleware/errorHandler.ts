@@ -18,6 +18,10 @@ export function errorHandler(
   response: Response,
   _next: NextFunction
 ) {
+  if (error instanceof Error && "statusCode" in error && typeof error.statusCode === "number") {
+    response.status(error.statusCode).json({ message: error.message, requestId: response.locals.requestId });
+    return;
+  }
   if (error instanceof ZodError) {
     response.status(400).json({
       message: "Validation failed.",

@@ -8,6 +8,7 @@ const navigationItems = [
   { label: "Customers", path: ROUTES.admin.customers },
   { label: "Contacts", path: ROUTES.admin.contacts },
   { label: "Estimates", path: ROUTES.admin.estimates },
+  { label: "Service Requests", path: ROUTES.admin.serviceRequests },
   { label: "Jobs", path: ROUTES.admin.jobs },
   { label: "Expenses", path: ROUTES.admin.expenses },
   { label: "Forms", path: ROUTES.admin.forms },

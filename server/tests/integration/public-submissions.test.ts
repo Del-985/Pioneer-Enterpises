@@ -21,13 +21,16 @@ const property = {
 
 async function clearDatabase() {
   await prisma.$transaction([
+    prisma.auditEvent.deleteMany(),
+    prisma.notification.deleteMany(),
     prisma.job.deleteMany(),
     prisma.quoteItem.deleteMany(),
     prisma.quote.deleteMany(),
     prisma.serviceRequest.deleteMany(),
     prisma.property.deleteMany(),
     prisma.contact.deleteMany(),
-    prisma.customer.deleteMany()
+    prisma.customer.deleteMany(),
+    prisma.user.deleteMany()
   ]);
 }
 

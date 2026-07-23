@@ -26,6 +26,7 @@ import "./styles/history.css";
 import "./styles/metrics.css";
 import "./styles/notifications.css";
 import "./styles/settings.css";
+import "./styles/service-requests.css";
 import "./styles/placeholders.css";
 import "./styles/debug-toolbar.css";
 

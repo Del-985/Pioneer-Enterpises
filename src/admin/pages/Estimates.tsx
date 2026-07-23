@@ -1,201 +1,130 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import EstimateDetail from "../components/EstimateDetail";
 import EstimateFilters from "../components/EstimateFilters";
-import EstimateForm from "../components/EstimateForm";
 import EstimateTable from "../components/EstimateTable";
-import type { BusinessSlug } from "../../shared/types/business";
-import {
-  calculateEstimateTotals,
-  type Estimate,
-  type EstimateStatus
-} from "../../shared/types/estimate";
+import { listAdminAssignees, listAdminQuotes, updateAdminQuote, type AdminQuote, type TeamMember } from "../../services/api/admin";
+import { calculateEstimateTotals, type Estimate, type EstimateStatus } from "../../shared/types/estimate";
 
-const seedEstimates: Estimate[] = [
-  {
-    id: "estimate-1",
-    estimateNumber: "EST-1001",
+function toEstimate(quote: AdminQuote): Estimate {
+  const subtotal = Number(quote.subtotal);
+  const discount = Number(quote.discount);
+  const taxable = Math.max(subtotal - discount, 0);
+  return {
+    id: quote.id,
+    estimateNumber: quote.number,
     business: "landscaping",
-    customerName: "Sample Homeowner",
-    customerEmail: "customer@example.com",
-    title: "Property cleanup and pressure washing",
-    status: "sent",
-    issuedDate: "2026-07-12",
-    expirationDate: "2026-08-11",
-    discount: 50,
-    taxRate: 0,
-    notes: "Estimate includes labor, disposal, and standard cleaning supplies.",
-    lineItems: [
-      { id: "item-1", description: "Driveway pressure washing", quantity: 1, unitPrice: 325 },
-      { id: "item-2", description: "Yard cleanup labor", quantity: 6, unitPrice: 55 },
-      { id: "item-3", description: "Debris disposal", quantity: 1, unitPrice: 125 }
-    ]
-  },
-  {
-    id: "estimate-2",
-    estimateNumber: "EST-1002",
-    business: "transport",
-    customerName: "Sample Commercial Client",
-    title: "Regional equipment delivery",
-    status: "approved",
-    issuedDate: "2026-07-10",
-    expirationDate: "2026-07-31",
-    discount: 0,
-    taxRate: 0,
-    lineItems: [
-      { id: "item-4", description: "Equipment transport", quantity: 1, unitPrice: 780 },
-      { id: "item-5", description: "Loading assistance", quantity: 2, unitPrice: 85 }
-    ]
-  },
-  {
-    id: "estimate-3",
-    estimateNumber: "EST-1003",
-    business: "productions",
-    customerName: "Sample Organization",
-    title: "Event media package",
-    status: "draft",
-    issuedDate: "2026-07-15",
-    expirationDate: "2026-08-14",
-    discount: 100,
-    taxRate: 0,
-    lineItems: [
-      { id: "item-6", description: "Event coverage", quantity: 1, unitPrice: 1200 },
-      { id: "item-7", description: "Edited highlight video", quantity: 1, unitPrice: 650 }
-    ]
-  }
-];
+    customerName: quote.customer.companyName || `${quote.customer.firstName} ${quote.customer.lastName}`,
+    customerEmail: quote.customer.email,
+    title: quote.title,
+    status: quote.status.toLowerCase() as EstimateStatus,
+    issuedDate: quote.createdAt.slice(0, 10),
+    expirationDate: quote.expiresAt?.slice(0, 10) ?? quote.createdAt.slice(0, 10),
+    lineItems: quote.items.map((item) => ({ id: item.id, description: item.description, quantity: Number(item.quantity), unitPrice: Number(item.unitPrice) })),
+    discount,
+    taxRate: taxable > 0 ? (Number(quote.tax) / taxable) * 100 : 0,
+    notes: quote.internalNotes || quote.description || undefined,
+    assignedTo: quote.assignedTo ? `${quote.assignedTo.firstName} ${quote.assignedTo.lastName}` : undefined
+  };
+}
 
 function formatCurrency(value: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0
-  }).format(value);
+  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value);
 }
 
 function Estimates() {
-  const [estimates, setEstimates] = useState(seedEstimates);
-  const [selectedId, setSelectedId] = useState(seedEstimates[0]?.id);
-  const [search, setSearch] = useState("");
-  const [business, setBusiness] = useState<BusinessSlug | "all">("all");
-  const [status, setStatus] = useState<EstimateStatus | "all">("all");
-  const [showForm, setShowForm] = useState(false);
-  const [editingEstimate, setEditingEstimate] = useState<Estimate | undefined>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("search") ?? "";
+  const status = (searchParams.get("status") ?? "all") as EstimateStatus | "all";
+  const page = Number(searchParams.get("page") ?? "1");
+  const selectedId = searchParams.get("quote");
+  const [estimates, setEstimates] = useState<Estimate[]>([]);
+  const [rawQuotes, setRawQuotes] = useState<AdminQuote[]>([]);
+  const [assignees, setAssignees] = useState<TeamMember[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [draftAssignee, setDraftAssignee] = useState("");
+  const [draftNotes, setDraftNotes] = useState("");
 
-  const filteredEstimates = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    return estimates.filter((estimate) => {
-      const matchesSearch =
-        !query ||
-        estimate.estimateNumber.toLowerCase().includes(query) ||
-        estimate.customerName.toLowerCase().includes(query) ||
-        estimate.title.toLowerCase().includes(query);
-      const matchesBusiness = business === "all" || estimate.business === business;
-      const matchesStatus = status === "all" || estimate.status === status;
-
-      return matchesSearch && matchesBusiness && matchesStatus;
-    });
-  }, [estimates, search, business, status]);
-
-  const selectedEstimate = estimates.find((estimate) => estimate.id === selectedId);
-  const totalPipeline = estimates.reduce(
-    (sum, estimate) => sum + calculateEstimateTotals(estimate).total,
-    0
-  );
-  const approvedValue = estimates
-    .filter((estimate) => estimate.status === "approved")
-    .reduce((sum, estimate) => sum + calculateEstimateTotals(estimate).total, 0);
-
-  const saveEstimate = (estimate: Estimate) => {
-    setEstimates((current) => {
-      const exists = current.some((item) => item.id === estimate.id);
-      return exists
-        ? current.map((item) => (item.id === estimate.id ? estimate : item))
-        : [estimate, ...current];
-    });
-    setSelectedId(estimate.id);
-    setShowForm(false);
-    setEditingEstimate(undefined);
+  const setParam = (key: string, value?: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (value && value !== "all") next.set(key, value); else next.delete(key);
+    if (key !== "page" && key !== "quote") next.delete("page");
+    setSearchParams(next);
   };
 
-  const updateSelectedStatus = (nextStatus: EstimateStatus) => {
+  const load = () => {
+    setLoading(true);
+    setError("");
+    void Promise.all([
+      listAdminQuotes({ search, status: status === "all" ? undefined : status.toUpperCase(), page, pageSize: 20 }),
+      listAdminAssignees()
+    ]).then(([result, team]) => {
+        const mapped = result.data.map(toEstimate);
+        setRawQuotes(result.data);
+        setAssignees(team.data);
+        setEstimates(mapped);
+        setTotal(result.pagination.total);
+        setTotalPages(result.pagination.totalPages);
+        if (!selectedId && mapped[0]) setParam("quote", mapped[0].id);
+      })
+      .catch((reason: Error) => setError(reason.message))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(load, [search, status, page]);
+
+  const selectedEstimate = estimates.find((item) => item.id === selectedId);
+  const selectedRaw = rawQuotes.find((item) => item.id === selectedId);
+  const totalPipeline = useMemo(() => estimates.reduce((sum, item) => sum + calculateEstimateTotals(item).total, 0), [estimates]);
+  const approvedValue = useMemo(() => estimates.filter((item) => item.status === "approved").reduce((sum, item) => sum + calculateEstimateTotals(item).total, 0), [estimates]);
+
+  useEffect(() => {
+    setDraftAssignee(selectedRaw?.assignedToId ?? "");
+    setDraftNotes(selectedRaw?.internalNotes ?? "");
+  }, [selectedRaw?.id, selectedRaw?.assignedToId, selectedRaw?.internalNotes]);
+
+  const applyUpdatedQuote = (quote: AdminQuote) => {
+    setRawQuotes((current) => current.map((item) => item.id === quote.id ? quote : item));
+    setEstimates((current) => current.map((item) => item.id === quote.id ? toEstimate(quote) : item));
+  };
+
+  const updateSelectedStatus = async (nextStatus: EstimateStatus) => {
     if (!selectedEstimate) return;
-    saveEstimate({ ...selectedEstimate, status: nextStatus });
+    setSaving(true);
+    setError("");
+    try {
+      const result = await updateAdminQuote(selectedEstimate.id, { status: nextStatus.toUpperCase() as AdminQuote["status"] });
+      applyUpdatedQuote(result.data);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to update the quote.");
+    } finally { setSaving(false); }
+  };
+
+  const saveOperations = async () => {
+    if (!selectedRaw) return;
+    setSaving(true);
+    setError("");
+    try {
+      const result = await updateAdminQuote(selectedRaw.id, { assignedToId: draftAssignee || null, internalNotes: draftNotes || null });
+      applyUpdatedQuote(result.data);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Unable to update the quote.");
+    } finally { setSaving(false); }
   };
 
   return (
     <section className="admin-estimates-page">
-      <div className="admin-page-heading">
-        <div>
-          <p className="admin-page-heading__eyebrow">Sales</p>
-          <h2 className="admin-page-heading__title">Estimates</h2>
-          <p className="admin-page-heading__description">
-            Create, review, send, and approve customer estimates across every Pioneer business.
-          </p>
-        </div>
-        <button
-          className="estimates-page__create-button"
-          type="button"
-          onClick={() => {
-            setEditingEstimate(undefined);
-            setShowForm(true);
-          }}
-        >
-          New Estimate
-        </button>
-      </div>
-
-      <div className="estimate-summary-grid">
-        <article><span>Total Estimates</span><strong>{estimates.length}</strong></article>
-        <article><span>Open Pipeline</span><strong>{formatCurrency(totalPipeline)}</strong></article>
-        <article><span>Approved Value</span><strong>{formatCurrency(approvedValue)}</strong></article>
-        <article><span>Awaiting Response</span><strong>{estimates.filter((item) => item.status === "sent").length}</strong></article>
-      </div>
-
-      <EstimateFilters
-        search={search}
-        business={business}
-        status={status}
-        onSearchChange={setSearch}
-        onBusinessChange={setBusiness}
-        onStatusChange={setStatus}
-      />
-
-      <div className="estimates-page__layout">
-        <section className="estimates-page__list">
-          <EstimateTable
-            estimates={filteredEstimates}
-            selectedEstimateId={selectedId}
-            onSelectEstimate={(estimate) => setSelectedId(estimate.id)}
-          />
-        </section>
-
-        <EstimateDetail
-          estimate={selectedEstimate}
-          onStatusChange={updateSelectedStatus}
-          onEdit={() => {
-            setEditingEstimate(selectedEstimate);
-            setShowForm(true);
-          }}
-        />
-      </div>
-
-      {showForm ? (
-        <div className="estimate-modal" role="dialog" aria-modal="true" aria-label="Estimate form">
-          <div className="estimate-modal__backdrop" onClick={() => setShowForm(false)} />
-          <div className="estimate-modal__content">
-            <EstimateForm
-              estimate={editingEstimate}
-              onSubmit={saveEstimate}
-              onCancel={() => {
-                setShowForm(false);
-                setEditingEstimate(undefined);
-              }}
-            />
-          </div>
-        </div>
-      ) : null}
+      <div className="admin-page-heading"><div><p className="admin-page-heading__eyebrow">Sales</p><h2 className="admin-page-heading__title">Quotes</h2><p className="admin-page-heading__description">Review and manage live quote requests submitted through Pioneer intake forms.</p></div></div>
+      <div className="estimate-summary-grid"><article><span>Total Quotes</span><strong>{total}</strong></article><article><span>Visible Pipeline</span><strong>{formatCurrency(totalPipeline)}</strong></article><article><span>Approved Value</span><strong>{formatCurrency(approvedValue)}</strong></article><article><span>Awaiting Response</span><strong>{estimates.filter((item) => item.status === "sent").length}</strong></article></div>
+      <EstimateFilters search={search} status={status} onSearchChange={(value) => setParam("search", value)} onStatusChange={(value) => setParam("status", value)} />
+      {error ? <div className="admin-data-state admin-data-state--error" role="alert"><p>{error}</p><button type="button" onClick={load}>Retry</button></div> : null}
+      {saving ? <div className="admin-data-state" aria-live="polite">Saving quote…</div> : null}
+      {loading ? <div className="admin-data-state" aria-live="polite">Loading quotes…</div> : <><div className="estimates-page__layout"><section className="estimates-page__list"><EstimateTable estimates={estimates} selectedEstimateId={selectedId ?? undefined} onSelectEstimate={(estimate) => setParam("quote", estimate.id)} /><div className="admin-pagination"><button type="button" disabled={page <= 1} onClick={() => setParam("page", String(page - 1))}>Previous</button><span>Page {page} of {totalPages}</span><button type="button" disabled={page >= totalPages} onClick={() => setParam("page", String(page + 1))}>Next</button></div></section><EstimateDetail estimate={selectedEstimate} onStatusChange={updateSelectedStatus} /></div>{selectedRaw ? <section className="estimate-operations"><h3>Internal workflow</h3><label><span>Assigned to</span><select value={draftAssignee} onChange={(event) => setDraftAssignee(event.target.value)}><option value="">Unassigned</option>{assignees.map((member) => <option key={member.id} value={member.id}>{member.firstName} {member.lastName}</option>)}</select></label><label><span>Internal notes</span><textarea rows={5} value={draftNotes} onChange={(event) => setDraftNotes(event.target.value)} /></label><button type="button" disabled={saving} onClick={saveOperations}>{saving ? "Saving…" : "Save Workflow"}</button></section> : null}</>}
     </section>
   );
 }

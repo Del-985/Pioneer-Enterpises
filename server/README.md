@@ -44,6 +44,19 @@ The backend CI workflow provisions PostgreSQL and performs these steps automatic
 - `POST /api/auth/forgot-password`
 - `POST /api/public/quotes`
 - `POST /api/public/service-requests`
+- `GET /api/admin/assignees`
+- `GET /api/admin/customers`
+- `GET /api/admin/customers/:id`
+- `GET /api/admin/quotes`
+- `GET /api/admin/quotes/:id`
+- `PATCH /api/admin/quotes/:id`
+- `GET /api/admin/service-requests`
+- `GET /api/admin/service-requests/:id`
+- `PATCH /api/admin/service-requests/:id`
+
+All `/api/admin` routes require a valid `ADMIN` or `EMPLOYEE` bearer token.
+List endpoints support search, status filters, sorting, and page-based pagination.
+Quote and service-request workflow changes create audit events.
 
 ## Frontend configuration
 

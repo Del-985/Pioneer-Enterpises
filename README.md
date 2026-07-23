@@ -173,6 +173,11 @@ GET  /api/auth/me
 POST /api/auth/forgot-password
 POST /api/public/quotes
 POST /api/public/service-requests
+GET  /api/admin/customers
+GET  /api/admin/quotes
+GET  /api/admin/service-requests
+PATCH /api/admin/quotes/:id
+PATCH /api/admin/service-requests/:id
 ```
 
 ## Architectural Principles
